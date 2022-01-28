@@ -1,0 +1,22 @@
+@import 'variables';
+
+@import '~sweetalert2/dist/sweetalert2';
+
+@import 'elements/card';
+@import 'elements/navbar';
+@import 'elements/buttons';
+@import 'elements/transitions';
+
+@import 'components/server-error';
+@import "~vuetify/dist/vuetify.min.css";
+@import "~vazir-font/dist/font-face.css";
+@import '~@mdi/font/css/materialdesignicons.css';
+
+.v-application .text-h5, .v-application .text-h6,*{
+  font-family: 'Vazir', serif !important;
+}
+
+a{
+  text-decoration: none;
+}
+
