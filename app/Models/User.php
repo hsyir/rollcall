@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
@@ -112,5 +114,47 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+
+    public function lastAttendances()
+    {
+        return Attendance::whereUserId($this->id)->latest()->limit(5)->get();
+    }
+
+    public function isEntered()
+    {
+        $attendance = $this->todayLastAttendance();
+        return $attendance and !$attendance->end_at;
+    }
+
+    public function todayLastAttendance()
+    {
+        return Attendance::whereUserId($this->id)->whereDate("start_at", Carbon::today())->latest()->first();
+    }
+
+
+    public function rollcallIn()
+    {
+        return Attendance::create([
+            "user_id" => Auth::user()->id,
+            "start_at" => Carbon::now()
+        ]);
+    }
+
+    public function rollcallOut()
+    {
+        $attendance = Attendance::whereUserId($this->id)
+            ->whereDate("start_at", Carbon::today())
+            ->whereNull("end_at")
+            ->latest()
+            ->first();
+
+        if (!$attendance)
+            return false;
+
+        $attendance->end_at = Carbon::now();
+        $attendance->save();
+        return true;
     }
 }

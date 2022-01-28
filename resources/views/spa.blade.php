@@ -17,6 +17,7 @@ $appCss = mix('dist/css/app.css');
   <title>{{ config('app.name') }}</title>
 
   <link rel="stylesheet" href="{{ (str_starts_with($appCss, '//') ? 'http:' : '').$appCss }}">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
   <div id="app"></div>

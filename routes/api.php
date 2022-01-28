@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\RollcallController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::post('rollcall/in', [RollcallController::class, 'rollcallIn']);
+    Route::post('rollcall/out', [RollcallController::class, 'rollcallOut']);
+    Route::get('rollcall/lastStatus', [RollcallController::class, 'status']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
